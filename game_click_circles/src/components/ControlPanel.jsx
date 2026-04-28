@@ -28,7 +28,7 @@ const ControlPanel = ({
 
       <div className="stats-row">
         <div className="points-input-group">
-          <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>POINTS:</span>
+          <span style={{ fontWeight: '700', fontSize: '1.3rem' }}>POINTS:</span>
           <input
             type="number"
             className="points-input"
