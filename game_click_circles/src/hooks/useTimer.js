@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { GAME_STATUS } from '../constants/gameStatus';
 
 export const useTimer = (status, gameId) => {
   const [time, setTime] = useState(0);
@@ -22,7 +23,7 @@ export const useTimer = (status, gameId) => {
       startTimeRef.current = 0;
       
       // Nếu game đang ở trạng thái PLAYING, bắt đầu đếm ngay lập tức
-      if (status === 'PLAYING') {
+      if (status === GAME_STATUS.PLAYING) {
         startTimeRef.current = performance.now();
         requestRef.current = requestAnimationFrame(tick);
       }
@@ -30,7 +31,7 @@ export const useTimer = (status, gameId) => {
   }, [gameId]);
 
   useEffect(() => {
-    if (status === 'PLAYING') {
+    if (status === GAME_STATUS.PLAYING) {
       // Chỉ bắt đầu timer nếu nó chưa chạy (tránh trùng lặp khi gameId reset xong)
       if (!requestRef.current) {
         startTimeRef.current = performance.now() - (time * 1000);

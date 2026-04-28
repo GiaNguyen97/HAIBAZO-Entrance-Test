@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { GAME_STATUS } from '../constants/gameStatus';
+import { GAME_CONFIG } from '../constants/config';
 import { getRandomPosition } from '../utils/randomPosition';
 import { useTimer } from './useTimer';
+import { useAutoPlay } from './useAutoPlay';
 import { playSound } from '../utils/audio';
 
 export const useGameLogic = () => {
@@ -11,8 +13,8 @@ export const useGameLogic = () => {
   const [status, setStatus] = useState(GAME_STATUS.IDLE);
   const [autoPlay, setAutoPlay] = useState(false);
   const [gameId, setGameId] = useState(0);
+  
   const { time, setTime } = useTimer(status, gameId);
-
   const statusRef = useRef(status);
   const gameIdRef = useRef(gameId);
 
@@ -28,6 +30,7 @@ export const useGameLogic = () => {
     const currentPoints = customPoints !== undefined ? customPoints : points;
     setGameId((prev) => prev + 1);
     playSound('START');
+    
     const newCircles = Array.from({ length: currentPoints }, (_, i) => {
       const { x, y } = getRandomPosition();
       return {
@@ -39,6 +42,7 @@ export const useGameLogic = () => {
         zIndex: currentPoints - i
       };
     });
+    
     setCircles(newCircles);
     setNext(1);
     setStatus(GAME_STATUS.PLAYING);
@@ -49,7 +53,7 @@ export const useGameLogic = () => {
   }, [startGame]);
 
   const handleCircleClick = useCallback((id) => {
-    if (status !== GAME_STATUS.PLAYING) return;
+    if (statusRef.current !== GAME_STATUS.PLAYING) return;
 
     if (id === next) {
       // Đúng node
@@ -66,7 +70,6 @@ export const useGameLogic = () => {
       setTimeout(() => {
         if (statusRef.current !== GAME_STATUS.GAME_OVER && gameIdRef.current === currentId) {
           if (isLast) {
-            // Gộp cập nhật để React batch tốt hơn
             setStatus(GAME_STATUS.WIN);
             playSound('WIN');
             setCircles([]);
@@ -74,7 +77,7 @@ export const useGameLogic = () => {
             setCircles((prev) => prev.filter((circle) => circle.id !== id));
           }
         }
-      }, 3000);
+      }, GAME_CONFIG.FADE_DURATION);
 
       setNext((prev) => prev + 1);
     } else {
@@ -82,26 +85,14 @@ export const useGameLogic = () => {
       playSound('CLICK_WRONG');
       setStatus(GAME_STATUS.GAME_OVER);
     }
-  }, [next, points, status]);
+  }, [next, points]);
+
+  // Sử dụng hook Auto Play đã tách riêng
+  useAutoPlay(autoPlay, status, next, circles, handleCircleClick);
 
   const toggleAutoPlay = () => {
     setAutoPlay((prev) => !prev);
   };
-
-  // Logic for Auto Play
-  useEffect(() => {
-    let timeout;
-    if (autoPlay && status === GAME_STATUS.PLAYING) {
-      // Find the correct node
-      const target = circles.find((c) => c.id === next && !c.isClicked);
-      if (target) {
-        timeout = setTimeout(() => {
-          handleCircleClick(next);
-        }, 400); // Trigger click every 400ms
-      }
-    }
-    return () => clearTimeout(timeout);
-  }, [autoPlay, status, next, circles, handleCircleClick]);
 
   return {
     points,
