@@ -8,8 +8,6 @@ const GameBoard = ({ circles, handleCircleClick, status }) => {
       style={{
         flex: 1,
         position: 'relative',
-        overflow: 'hidden',
-        minHeight: '400px'
       }}
     >
       {circles.map((circle) => (
