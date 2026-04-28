@@ -41,8 +41,8 @@ Dự án này cho phép người dùng quản lý danh sách tác giả, đầu 
 book_review_web/
 ├── backend/            # Mã nguồn Spring Boot
 ├── frontend/           # Mã nguồn ReactJS (Vite)
+├── docs/               # Tài liệu thiết kế & kế hoạch
 ├── docker-compose.yml  # Cấu hình Docker cho Database
-├── PROJECT_PLAN.md     # Kế hoạch phát triển chi tiết
 └── README.md           # Hướng dẫn này
 ```
 
@@ -96,4 +96,4 @@ Frontend sẽ chạy tại: `http://localhost:5173`
 
 ## 🤝 Liên hệ
 - Dự án được phát triển bởi: **HAIBAZO Team** (CodeGym)
-- Kế hoạch chi tiết tại: [PROJECT_PLAN.md](file:///e:/CODEGYM/bai_tap_code_gym/HAIBAZO/book_review_web/PROJECT_PLAN.md)
+- Tài liệu chi tiết: [Kế hoạch & Thiết kế](docs/PROJECT_PLAN.md)
