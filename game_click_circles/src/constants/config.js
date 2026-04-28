@@ -1,0 +1,9 @@
+export const GAME_CONFIG = {
+  FADE_DURATION: 3000, // ms
+  AUTO_PLAY_INTERVAL: 400, // ms
+  CIRCLE_SIZE: 54, // px
+  MIN_COORDINATE: 5, // %
+  MAX_COORDINATE_RANGE: 80, // % (để max là 85%)
+  COUNTDOWN_INTERVAL: 100, // ms
+  INITIAL_COUNTDOWN: 3.0, // s
+};
